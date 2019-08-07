@@ -11,3 +11,33 @@
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+
+
+
+  var chat = {
+    message:"",
+    getMessage:"",
+    sendMessage: function() {
+      $('.message_submit').on('click', function(event) {
+        event.preventDefault();
+        var username = name[party];
+        var message = $('.message_input').val();
+        chatRef.push(username + ": " + message);
+        $('.message_input').val('');
+      });
+      chat.showMessage();
+    },
+    sendDisconnect: function() {
+      chatRef.on('child_disconnect', function(snapshot) {
+        $('.message-body').append(name[party] + ' has disconnected.');
+      });
+    },
+    showMessage: function() {
+      chatRef.on('child_added', function(childSnapshot, prevChildKey) {
+        var message_list = childSnapshot.val();
+        $('.message_body').append('<p>' + message_list + "</p>")
+      });
+    },
+  };
+
+  chat.sendMessage();
