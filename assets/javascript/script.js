@@ -11,7 +11,27 @@
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  var database = firebase.database();
+  var presenceRef = database.ref(".info/connected");
+  var presenceNumRef = database.ref("/presenceNum");
+  var partysRef = database.ref("/partysRef");
+  var turnRef = database.ref("/turn");
+  var chatRef = database.ref("/chat");
+  var results = database.ref("/results");
+  var winnerRef = database.ref("/winner");
+  
+  var wins1
+  var wins2
+  var losses1
+  var losses2;
+  var party;
+  var otherparty;
+  var name = {};
+  var userRef;
 
+
+  
+  var choices = ['rock','paper','scissors'];
 
 
   var chat = {
