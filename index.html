@@ -14,100 +14,96 @@
 </head>
   <body>
     <div class='container'>
-        <div>
-            <!-- Nav tabs -->
-            <table class="pull-right">
-            </table>
+
+        <div class="jumbotron">
+            <h1 class="text-center">Rock Paper Scissors</h1>
+
         </div>
 
-    <div class="jumbotron">
-        <h1 class="text-center">Rock Paper Scissors</h1>
-    </div>
-
-    
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default text-center">
-                <div class="panel-heading">
-                    <div class="panel-title name-panel">
-                        <span class='d-print-inline'>Your Name</span>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <div class="panel-title name-panel">
+                            <span class='d-print-inline'>Your Team Name</span>
+                        </div>
                     </div>
+
+                    <form class="text-center name-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="name-input" placeholder="Team Name">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary" id="submit-name" type="submit">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                    </form>
                 </div>
-                <form class="text-center name-form">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="name-input" placeholder="Enter Your Name">
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary" id="submit-name" type="submit">
-                                    Submit
-                                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default party1panel">
+                    <div class="panel-heading">
+                        <div class="panel-body text-center p1_name">
+                            <h1>Player 1</h1>
+                        </div>
+                    </div>
+                    <div class="panel-body rps-selection-panel">
+                        <div class="score score1"></div>
+                        <div class="row">
+                            <div class="col-sm-12 choices1 text-center">
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="results" style="z-index: -1"></div>
+            <div class="col-sm-6">
+                <div class="panel panel-default party2panel">
+                    <div class="panel-heading">
+                        <div class="panel-body text-center p2_name">
+                            <h1>Player 2</h1>
+                        </div>
+                    </div>
+                    <div class="panel-body rps-selection-panel">
+                        <div class="score score2"></div>
+                        <div class="row">
+                            <div class="col-sm-12 choices2 text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default message_board">
+                    <div class="panel-heading message_heading">
+                        Messages
+                    </div>
+                    <div class="panel-body message_body">
+                    </div>
+                </div>
+                <form class="text-center">
+                    <div class="input-group">
+                        <input type="text" class="form-control message_input" placeholder="Message">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary message_submit" type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
+
+
+
     </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-default player1panel">
-                <div class="panel-heading">
-                    <div class="panel-body text-center p1_name">
-                        <h1>Player 1</h1>
-                    </div>
-                </div>
-                <div class="panel-body rps-selection-panel">
-                    <div class="score score1"></div>
-                    <div class="row">
-                        <div class="col-sm-12 choices1 text-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
- 
-        
-
-
-        <div class="results"></div>
-        <div class="col-sm-6">
-            <div class="panel panel-default player2panel">
-                <div class="panel-heading">
-                    <div class="panel-body text-center p2_name">
-                        <h1>Player 2</h1>
-                    </div>
-                </div>
-                <div class="panel-body rps-selection-panel">
-                    <div class="score score2"></div>
-                    <div class="row">
-                        <div class="col-sm-12 choices2 text-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-default message_board">
-                <div class="panel-heading message_heading">
-                    Messages
-                </div>
-                <div class="panel-body message_body">
-                </div>
-            </div>
-            <form class="text-center">
-                <div class="input-group">
-                    <input type="text" class="form-control message_input" placeholder="Message">
-                    <div class="input-group-btn">
-                        <button class="btn btn-primary message_submit" type="submit">
-                            Submit
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
 
 
     <!-- Optional JavaScript -->
@@ -117,6 +113,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+    <script src="assets/javascript/app.js"></script>
 
 </body>
 </html>

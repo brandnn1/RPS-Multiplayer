@@ -33,31 +33,94 @@
   
   var choices = ['rock','paper','scissors'];
 
+  
+    // Remove turn and chat if disconnect
+    turnRef.onDisconnect().remove();
+    chatRef.onDisconnect().remove();
+    winnerRef.onDisconnect().remove();
+  
+    
+    // Remove turn and chat if disconnect
+    turnRef.onDisconnect().remove();
+    chatRef.onDisconnect().remove();
+    winnerRef.onDisconnect().remove();
+  
+    var game = {
+      listeners: function() {
+        presenceRef.on('value', function(snapshot){
+          if (snapshot.val()) {
+            var con = presenceNumRef.push(true);
+            con.onDisconnect().remove();
+          }
+        });
 
-  var chat = {
-    message:"",
-    getMessage:"",
-    sendMessage: function() {
-      $('.message_submit').on('click', function(event) {
-        event.preventDefault();
-        var username = name[party];
-        var message = $('.message_input').val();
-        chatRef.push(username + ": " + message);
-        $('.message_input').val('');
-      });
-      chat.showMessage();
-    },
-    sendDisconnect: function() {
-      chatRef.on('child_disconnect', function(snapshot) {
-        $('.message-body').append(name[party] + ' has disconnected.');
-      });
-    },
-    showMessage: function() {
-      chatRef.on('child_added', function(childSnapshot, prevChildKey) {
-        var message_list = childSnapshot.val();
-        $('.message_body').append('<p>' + message_list + "</p>")
-      });
-    },
-  };
-
-  chat.sendMessage();
+        $('#submit-name').one('click', function() {
+          game.setparty();
+          return false
+        });
+        partysRef.on('child_added', function(populateUserInfo) {
+          var key = populateUserInfo.key;
+          name[key] = populateUserInfo.val().name;
+          var party_title = $('.p' + key + '_name');
+          party_title.empty();
+          var $h1 = $('<h2>').text(name[key]);
+          party_title.append($h1);
+          var wins = populateUserInfo.val().wins;
+          var losses = populateUserInfo.val().losses;
+          var _wins = $('<h6>').text('Wins: ' + wins);
+          var _losses = $('<h6>').text('Losses: ' + losses);
+          $('.score' + key).append(_wins).append(_losses).append('<br><br>');
+        });
+        partysRef.on('child_removed', function(populateUserInfo) {
+          var key = populateUserInfo.key;
+          var party_title = $('.p' + key + '_name');
+          var party_score = $('.score' + key);
+          party_title.empty();
+          party_score.empty();
+          var $h1 = $('<h2>').text('Waiting for party ' + key + ' to Join');
+          party_title.append($h1);
+        });
+        turnRef.on('value', function(snapshot) {
+          var turnNum = snapshot.val();
+          if (turnNum == 1) {
+            $('.choices1').empty();
+            $('.results').empty();
+            $('.choices2').empty();
+            game.turn1();
+          } else if (turnNum == 2) {
+            game.turn2();
+          } else if (turnNum == 3) {
+            game.turn3();
+          }
+        });
+        partysRef.child(1).on('child_changed', function(populateUserInfo) {
+          if (populateUserInfo.key == 'wins') {
+            wins1 = populateUserInfo.val();
+          } else if (populateUserInfo.key == 'losses') {
+            losses1 = populateUserInfo.val();
+          };
+          if (wins1 !== undefined) {
+            $('.score1').text('Wins: ' + wins1);
+            $('.score1').text('Losses: ' + losses1);
+          }
+        });
+        partysRef.child(2).on('child_changed', function(populateUserInfo) {
+          if (populateUserInfo.key == 'wins') {
+            wins2 = populateUserInfo.val();
+            console.log(wins2);
+          } else if (populateUserInfo.key == 'losses') {
+            losses2 = populateUserInfo.val();
+          };
+          $('.score2').text('Wins: ' + wins2);
+          $('.score2').text('Losses: ' + losses2);
+        });
+        winnerRef.on('value', function(snapshot) {
+            console.log('Results: ' + snapshot.val());
+            $('.results').text(snapshot.val()).css('z-index','1');
+          setTimeout(function() {
+            console.log('CSS Animation Step 2');
+            // turnRef.set(1);
+            $('.results').text('').css('z-index','-1');
+          }, 2000);
+          });
+      },
