@@ -1,4 +1,4 @@
-
+$(document).on('ready', function() {
   // Your web app's Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyBg6IyWj3curcfPuAeV8MMy07PgO1WuTjY",
@@ -340,3 +340,4 @@
       };
     
       chat.sendMessage();
+    });
