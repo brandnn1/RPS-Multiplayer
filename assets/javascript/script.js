@@ -48,7 +48,7 @@
         });
 
         $('#submit-name').one('click', function() {
-          game.setparty();
+          game.setParty();
           return false
         });
         partysRef.on('child_added', function(populateUserInfo) {
@@ -68,9 +68,9 @@
           var key = populateUserInfo.key;
           var party_title = $('.p' + key + '_name');
           var party_score = $('.score' + key);
+          var $h1 = $('<h2>').text('Waiting for party ' + key + ' to Join');
           party_title.empty();
           party_score.empty();
-          var $h1 = $('<h2>').text('Waiting for party ' + key + ' to Join');
           party_title.append($h1);
         });
         turnRef.on('value', function(snapshot) {
@@ -117,27 +117,39 @@
           });
       },
       
-      setparty: function() {
-        console.log('setparty function firing');
+      turnMessage: function(playTurn) {
+        console.log('turnMessage function firing');
+        otherparty = party == 1 ? 2:1;
+        if (playTurn == party) {
+          $('h4').text("It's Your Turn!");
+        } else if (playTurn == otherparty) {
+          $('h4').text("Waiting for " + name[otherparty] + " to choose.");
+        } else {
+          $('h4').text('');
+        }
+      },
+
+      setParty: function() {
+        console.log('setParty function firing');
         database.ref().once('value', function(snapshot) {
           var partyObj = snapshot.child('partysRef');
           var num = partyObj.numChildren();
           if (num == 0) {
             party = 1;
-            game.addparty(party);
+            game.addParty(party);
           } else if (num == 1 && partyObj.val()[2] !== undefined) {
             party = 1;
-            game.addparty(party);
+            game.addParty(party);
             turnRef.set(1);
           } else if (num == 1) {
             party = 2;
-            game.addparty(party);
+            game.addParty(party);
             turnRef.set(1);
           }
         })
       },
-      addparty: function(count) {
-        console.log('addparty function firing');
+      addParty: function(count) {
+        console.log('addParty function firing');
         var partyName = $("#name-input").val();
         var name_form = $(".name-form");
         var name_panel = $(".name-panel>span");
@@ -152,4 +164,37 @@
           'wins': 0,
           'losses': 0
         })
+      },
+      showChoice: function() {
+        console.log('showChoice function firing');
+        for (i in choices) {
+          var $i = $('<img>');
+          $i.addClass('img-responsive ' + choices[i] + '_p1');
+          $i.attr('data-choice', choices[i]);
+          $i.attr('alt', choices[i]);
+          $i.attr('src','assets/images/' + choices[i] + '.gif');
+          $('.choices' + party).append(`<div class='${choices[i]}-container tablecell'>`);
+          $(`.${choices[i]}-container`).append($i);
+        };
+        $(document).one('click', 'img', game.setChoice);
+      },
+      setChoice: function() {
+        console.log('setChoice function firing');
+        var selection = $(this).attr('data-choice');
+        userRef.update({
+          'choice': selection
+        });
+        var $i = $("<img>");
+        $i.addClass('img-responsive ' + selection + '_p1')
+        $i.attr('data-choice', selection);
+        $i.attr('alt', selection);
+        $i.attr('src','assets/images/' + selection + '.gif');
+        $('.choices' + party).empty().append(`<div class='${choices[i]}-container tablecell'>`);
+        $(`.${choices[i]}-container`).append($i);
+        turnRef.once('value', function(snapshot) {
+          var turnNum = snapshot.val();
+          turnNum++;
+          turnRef.set(turnNum);
+        })
+  
       },

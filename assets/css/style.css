@@ -1,0 +1,51 @@
+.jumbotron {
+    background-color: bisque;
+    color: red
+    }
+    
+.rps-selection-panel {
+    height: 200px;
+}
+
+.choices1 {
+    width: 100%;
+    display: table;
+}
+
+.choices2 {
+    width: 100%;
+    display: table;
+}
+
+.results { 
+    position: absolute;
+    top: 25%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 3vw 0;
+    font-size: 9vw;
+    color: green;
+    text-shadow: 1px 1px rgb(0, 0, 0);
+    z-index: -1;
+    text-align: center;
+}
+
+.message_body {
+    overflow-wrap: break-word;
+    height: 150px;
+    overflow-y: scroll;
+    
+}
+
+img {
+    display:block;
+    margin: 0px auto;
+}
+
+.tablecell {
+    vertical-align: middle;
+    display: table-cell;
+    max-width: 100%;
+    object-fit: scale-down;
+}
