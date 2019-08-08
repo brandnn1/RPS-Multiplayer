@@ -254,6 +254,67 @@
           }
         }  
       },
+      winner: function(partyNum) {
+        console.log('winner function firing');
+        console.log(partyNum)
+        if (partyNum == 0) {
+          results = 'Tie!'
+          wins = wins
+          losses = losses
+          console.log(results)
+
+          var otherpartyNum = partyNum == 1 ? 2:1;
+          $('.choices' + otherpartyNum + ' > img').css('opacity','0.5');
+          partysRef.child(partyNum).update({
+            'wins': wins
+          });
+          partysRef.child(otherpartyNum).update({
+            'losses': losses
+          });
+          winnerRef.set(results);
+          setTimeout(function() {
+            turnRef.set(1);
+          },1000);
+        } else {
+          results = name[partyNum] + ' Wins!';
+          if (partyNum == 1)  {
+            wins = wins1;
+            losses = losses2;
+          } else if (partyNum == 2) {
+            wins = wins2;
+            losses = losses1;
+          } 
+          console.log(results)
+          wins++;
+          losses++;
+          // showResults(results);
+          var otherpartyNum = partyNum == 1 ? 2:1;
+          var nobodyWins = partyNum == 1 ? 0:0;
+          console.log(otherpartyNum)
+          console.log(nobodyWins)
+          $('.choices' + otherpartyNum + ' > img').css('opacity','0.5');
+          partysRef.child(partyNum).update({
+            'wins': wins
+          });
+          partysRef.child(otherpartyNum).update({
+            'losses': losses
+          });
+          winnerRef.set(results);
+          setTimeout(function() {
+            turnRef.set(1);
+          },1000);
+
+        };
+  
+      },
+
+      choiceCheck:function() {
+
+        game.logic();
+      }
+    };
+  
+    game.checkers();
 
 
 
