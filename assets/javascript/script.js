@@ -32,13 +32,6 @@
 
   
   var choices = ['rock','paper','scissors'];
-
-  
-    // Remove turn and chat if disconnect
-    turnRef.onDisconnect().remove();
-    chatRef.onDisconnect().remove();
-    winnerRef.onDisconnect().remove();
-  
     
     // Remove turn and chat if disconnect
     turnRef.onDisconnect().remove();
@@ -118,9 +111,45 @@
             console.log('Results: ' + snapshot.val());
             $('.results').text(snapshot.val()).css('z-index','1');
           setTimeout(function() {
-            console.log('CSS Animation Step 2');
             // turnRef.set(1);
             $('.results').text('').css('z-index','-1');
           }, 2000);
           });
+      },
+      
+      setparty: function() {
+        console.log('setparty function firing');
+        database.ref().once('value', function(snapshot) {
+          var partyObj = snapshot.child('partysRef');
+          var num = partyObj.numChildren();
+          if (num == 0) {
+            party = 1;
+            game.addparty(party);
+          } else if (num == 1 && partyObj.val()[2] !== undefined) {
+            party = 1;
+            game.addparty(party);
+            turnRef.set(1);
+          } else if (num == 1) {
+            party = 2;
+            game.addparty(party);
+            turnRef.set(1);
+          }
+        })
+      },
+      addparty: function(count) {
+        console.log('addparty function firing');
+        var partyName = $("#name-input").val();
+        var name_form = $(".name-form");
+        var name_panel = $(".name-panel>span");
+        name_panel.empty();
+        name_panel.text("Directions");
+        name_form.empty();
+        name_form.html("<h4>Time to Play</h4>");
+        userRef = partysRef.child(count);
+        userRef.onDisconnect().remove();
+        userRef.set({
+          'name': partyName,
+          'wins': 0,
+          'losses': 0
+        })
       },
