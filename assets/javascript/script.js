@@ -255,8 +255,6 @@
         }  
       },
       winner: function(partyNum) {
-        console.log('winner function firing');
-        console.log(partyNum)
         if (partyNum == 0) {
           results = 'Tie!'
           wins = wins
@@ -284,14 +282,11 @@
             wins = wins2;
             losses = losses1;
           } 
-          console.log(results)
           wins++;
           losses++;
           // showResults(results);
           var otherpartyNum = partyNum == 1 ? 2:1;
           var nobodyWins = partyNum == 1 ? 0:0;
-          console.log(otherpartyNum)
-          console.log(nobodyWins)
           $('.choices' + otherpartyNum + ' > img').css('opacity','0.5');
           partysRef.child(partyNum).update({
             'wins': wins
