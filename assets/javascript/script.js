@@ -33,7 +33,6 @@
   
   var choices = ['rock','paper','scissors'];
     
-    // Remove turn and chat if disconnect
     turnRef.onDisconnect().remove();
     chatRef.onDisconnect().remove();
     winnerRef.onDisconnect().remove();
@@ -100,7 +99,6 @@
         partysRef.child(2).on('child_changed', function(populateUserInfo) {
           if (populateUserInfo.key == 'wins') {
             wins2 = populateUserInfo.val();
-            console.log(wins2);
           } else if (populateUserInfo.key == 'losses') {
             losses2 = populateUserInfo.val();
           };
@@ -108,7 +106,6 @@
           $('.score2').text('Losses: ' + losses2);
         });
         winnerRef.on('value', function(snapshot) {
-            console.log('Results: ' + snapshot.val());
             $('.results').text(snapshot.val()).css('z-index','1');
           setTimeout(function() {
             // turnRef.set(1);
@@ -118,7 +115,6 @@
       },
       
       turnMessage: function(playTurn) {
-        console.log('turnMessage function firing');
         otherparty = party == 1 ? 2:1;
         if (playTurn == party) {
           $('h4').text("It's Your Turn!");
@@ -130,7 +126,6 @@
       },
 
       setParty: function() {
-        console.log('setParty function firing');
         database.ref().once('value', function(snapshot) {
           var partyObj = snapshot.child('partysRef');
           var num = partyObj.numChildren();
@@ -149,7 +144,6 @@
         })
       },
       addParty: function(count) {
-        console.log('addParty function firing');
         var partyName = $("#name-input").val();
         var name_form = $(".name-form");
         var name_panel = $(".name-panel>span");
@@ -166,7 +160,6 @@
         })
       },
       showChoice: function() {
-        console.log('showChoice function firing');
         for (i in choices) {
           var $i = $('<img>');
           $i.addClass('img-responsive ' + choices[i] + '_p1');
@@ -179,7 +172,6 @@
         $(document).one('click', 'img', game.setChoice);
       },
       setChoice: function() {
-        console.log('setChoice function firing');
         var selection = $(this).attr('data-choice');
         userRef.update({
           'choice': selection
@@ -198,3 +190,98 @@
         })
   
       },
+      
+      turn1: function() {
+        game.turnMessage(1);
+        if (party == 1) {
+          game.showChoice();
+        }
+      },
+      turn2: function() {
+        game.turnMessage(2);
+        if (party == 2) {
+          game.showChoice();
+        }
+      },
+      turn3: function() {
+        game.turnMessage(3);
+        game.outcome();
+      },
+      outcome: function() {
+        partysRef.once('value', function(snapshot) {
+          var snap1 = snapshot.val()[1];
+          var snap2 = snapshot.val()[2];
+          choice1 = snap1.choice;
+          wins1 = snap1.wins;
+          losses1 = snap1.losses;
+          choice2 = snap2.choice;
+          wins2 = snap2.wins;
+          losses2 = snap2.losses;
+          var textChoice = otherparty == 1 ? choice1:choice2;
+          var $i = $('<img>');
+          $i.addClass(textChoice + '_p1');
+          $i.attr('data-choice', textChoice);
+          $i.attr('alt', textChoice);
+          $i.attr('src', 'assets/images/' + textChoice + '.gif');
+          $('.choices' + otherparty).append($i);
+          game.choiceCheck();
+        })
+      },
+      logic: function() {
+        if (choice1 == 'paper') {
+            if (choice2 == 'paper'){
+              game.winner(0)
+            } else if (choice2 == 'rock') {
+              game.winner(1);
+            } else if (choice2 == 'scissors') {
+              game.winner(2);
+            }
+        } else if (choice1 == 'rock') {
+            if (choice2 == 'rock'){
+              game.winner(0)
+           } else if (choice2 == 'paper') {
+             game.winner(2);
+           } else if (choice2 == 'scissors') {
+             game.winner(1);
+           }
+        } else if (choice1 == 'scissors') {
+          if (choice2 == 'scissors'){
+            game.winner(0)
+          } else if (choice2 == 'rock') {
+            game.winner(2);
+          } else if (choice2 == 'paper') {
+            game.winner(1);
+          }
+        }  
+      },
+
+
+
+      var chat = {
+        message:"",
+        getMessage:"",
+        sendMessage: function() {
+          $('.message_submit').on('click', function(event) {
+            event.preventDefault();
+            var username = name[party];
+            var message = $('.message_input').val();
+            chatRef.push(username + ": " + message);
+            $('.message_input').val('');
+          });
+          chat.showMessage();
+        },
+        sendDisconnect: function() {
+          chatRef.on('child_disconnect', function(snapshot) {
+            $('.message-body').append(name[party] + ' has disconnected.');
+          });
+        },
+        showMessage: function() {
+          chatRef.on('child_added', function(populateUserInfo, prevChildKey) {
+            var message_list = populateUserInfo.val();
+            $('.message_body').append('<p>' + message_list + "</p>")
+          });
+        },
+      };
+    
+      chat.sendMessage();
+    })
